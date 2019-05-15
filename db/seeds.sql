@@ -15,3 +15,4 @@ INSERT INTO burgers (burger_name, devoured) VALUES("Rocky", 0);
 INSERT INTO burgers (burger_name, devoured) VALUES("Texan", 0);
 INSERT INTO burgers (burger_name, devoured) VALUES("Dare Devil", 0);
 
+-- UPDATE burgers SET devoured = 1 WHERE burger_name = ;

@@ -1,3 +1,62 @@
-<h1>Rocky's Burgers</h1>
+<div class="container bg">
+	
+	<div class="row">
+	    <div class="center col-sm-12">
+			  <img src="https://frontierburger.com/sites/default/files/styles/large/public/item_photos/2018-07/menuitem-hamburger.png?itok=QZG0Argx" alt="Eat-Da-Burger App">
+	        <h1>Rocky's Burgers</h1>
+	        <p></p>
+	    </div>
+  </div>
+	<!-- end .row -->
 
-<h2></h2>
+	<div class="row">
+	  <div class="col-sm-6">
+      <br>
+			<h2>Burgers Available To Eat!</h2>
+
+			<ul>
+			  {{#each burgers}}
+			    {{#unless this.devoured}}
+			      <li>{{this.id}}. {{this.burger_name}}
+
+			        <form action="api/burgers/x{{this.id}}?_method=PUT" method="POST">
+			          <input type="hidden" name="devoured" value="true">
+			          <button class="btn-primary" type="submit">Devour It!</button>
+			        </form>
+
+			      </li>
+			    {{/unless}}
+			  {{/each}}
+			</ul>
+
+	    </div>
+
+	    <div class="col-sm-6">
+
+			<h2>Burgers That Have Been Eaten!</h2>
+			
+			  {{#each burgers}}
+			    {{#if this.devoured}}
+			      <li>
+			      	{{this.id}}
+			        {{this.burger_name}}
+
+			      </li>
+			    {{/if}}
+			  {{/each}}
+			
+	    </div>
+
+  	</div>
+
+<h2>Add A Burger Option</h2>
+
+
+  <div id="input-form">
+    <form action="/api/burgers" method="POST">
+      <input type="text" id="name" name="burger_name" placeholder="Enter Buger Name Here!">
+      <button type="submit" class="addBurgerButton">Add The Burger</button>
+    </form>
+  </div>
+
+

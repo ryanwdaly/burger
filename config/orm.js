@@ -1,8 +1,8 @@
 var connection = require("../config/connection.js");
 
 var orm = {
-    all: function(tableInput, cb) {
-        var queryString = "SELECT * FROM " + tableInput + ";";
+    all: function(cb) {
+        let queryString = "SELECT * FROM burgers;";
         connection.query(queryString, function(err, result) {
             if(err) {
                 throw err;
@@ -10,33 +10,12 @@ var orm = {
             cb(result);
         });
     },
-    create: function(table, cols, vals, cb) {
-        var queryString = "INSERT INTO " + table;
-
-        queryString += " (";
-        queryString += cols.toString();
-        queryString += ") ";
-        queryString += "VALUES (";
-        queryString += printQuestionMarks(vals.length);
-        queryString += ") ";
-        
-        console.log(queryString);
-
-        connection.query(queryString, vals, function(err, result) {
-            if(err) {
-                throw err;
-            }
-
-            cb(result);
-        });
-    },
-    update: function(table, objColVals, condition, cb) {
-        var queryString = "UPDATE " + table;
-
-        queryString += " SET ";
-        queryString += objToSql(objColVals);
-        queryString += " WHERE ";
-        queryString += condition;
+    devour: function(id, cb) {
+        console.log("id",id)
+        id = id.substr(1)
+        let queryString = "UPDATE burgers SET devoured = 1 WHERE id = ";
+        queryString += id;
+        queryString += ";";
 
         console.log(queryString);
 
@@ -44,43 +23,29 @@ var orm = {
             if(err) {
                 throw err;
             }
-            cb(result);
+                cb(result);
         });
+    },
+    addBurger: function(burgerName, cb) {
+		// Construct the query string that inserts a single row into the target table
+		let queryString = "INSERT INTO burgers (burger_name, devoured) VALUES ('";
+        queryString += burgerName;
+        queryString += "', 0);";
+
+		console.log(queryString);
+
+		// Perform the database query
+		connection.query(queryString, function(err, result) {
+			if (err) {
+				throw err;
+			}
+
+			// Return results in callback
+			cb(result);
+		});
+
     }
-};
+}
 
 module.exports = orm;
 
-
-
-
-
-
-
-
-
-//HELPER FUNCTIONS
-function printQuestionMarks(num) {
-    var arr = []
-
-    for (i = 0; i < num; i++) {
-        arr.push("?");
-    }
-
-    return arr.toString();
-}
-function objToSql(obj) {
-    var arr = [];
-
-    for(var key in obj) {
-        var value = obj[key];
-
-        if(Object.hasOwnProperty.call(obj, key)) {
-            if(typeof value === "string" && value.indexOf(" ") > 0) {
-                value = "'" + value + "'";
-            }
-            arr.push(key + "=" + value);
-        }
-    }
-    return arr.toString();
-}
